@@ -70,7 +70,7 @@ The above figure contains thumbnails of duplicate mementos, grouped by color. Me
 
 Type the following:
 ```
-select_by_language -i 3649-otmt.json -c 3649-nonduplicates.txt --lang en –o 3649-lang.en.txt
+select_by_language -i 3649-otmt.json -c 3649-nonduplicates.txt --lang en -o 3649-lang.en.txt
 ```
 
 * `3649-otmt.json` is data about collection 3649 generated in the previous section
@@ -109,7 +109,7 @@ This way the size of the story grows slowly as needed for large collections
 
 Type the following:
 ```
-cluster_by_simhash -i 3649-otmt.json -s 3649-sliced.tsv –o 3649-clustered.tsv
+cluster_by_simhash -i 3649-otmt.json -s 3649-sliced.tsv -o 3649-clustered.tsv
 ```
 
 * `3649-otmt.json` is data about collection 3649 generated in the previous section
