@@ -23,7 +23,7 @@ We will use the file `story-mementos.txt` containing 5 memento URIs.
 
 Run the following command: 
 ```
-tellstory -i mystory.txt --storyteller html --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -o mystory.html
+tellstory -i story-mementos.txt --storyteller html --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -o mystory.html
 ```
 
 * `story-mementos.txt` is the list of mementos
@@ -50,10 +50,10 @@ For each memento URL you submitted:
 
 Run the following command: 
 ```
-tellstory -i mystory.txt --storyteller html --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -o mystory.html --preset thumbnails4col
+tellstory -i story-mementos.txt --storyteller html --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -o mystory.html --preset thumbnails4col
 ```
 
-The `--preset` flag provides a number of presets for you to choose from, including thumbnails4col which produces a 4 column thumbnail story.
+The `--preset` flag provides a number of presets for you to choose from, including `thumbnails4col` which produces a 4 column thumbnail story.
 
 More presets are available as seen at: https://oduwsdl.github.io/raintale/template_gallery.html
 
@@ -75,7 +75,7 @@ One of the options for `tellstory`’s `--storyteller` argument is `twitter`
 
 To use this, you must also supply the -c argument and the name of a file containing your twitter credentials, like so:
 ```
-tellstory -i mystory.txt --storyteller twitter --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -c twitter-credentials.yaml
+tellstory -i story-mementos.txt --storyteller twitter --title "Boston Marathon Bombing" --collection-url https://archive-it.org/collections/3649 --generated-by "Shawn M. Jones" -c twitter-credentials.yaml
 ```
 
 
