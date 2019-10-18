@@ -151,4 +151,4 @@ select_high_quality -i 3649-clustered.tsv --damage-uri http://localhost:8888 –
 
 With this list, we can now visualize our story
 
-[Next: Exercise - Visualizing a Single Memento](exercise-visualize-single-memento.md)
+[Back to Table of Contents](README.md)
