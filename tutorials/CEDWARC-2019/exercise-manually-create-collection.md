@@ -25,4 +25,4 @@ Steps for this exercise:
 * Is there bias in your story?
 * How well do you think your story covered the underlying collection?
 
-[Back to Table of Contents](Readme.md)
+[Back to Table of Contents](README.md)
