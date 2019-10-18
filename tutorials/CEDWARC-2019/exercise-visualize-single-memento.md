@@ -38,4 +38,4 @@
 
 ![MementoEmbed Imagereel](https://mementoembed.readthedocs.io/en/latest/_images/imagereel-example.gif)
 
-[Next: Exercise – Automatically Visualizing A Full Story of Mementos](exercise-visualize-full-story.md)
+[Back to Table of Contents](README.md)
