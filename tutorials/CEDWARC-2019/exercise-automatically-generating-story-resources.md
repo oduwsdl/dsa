@@ -8,7 +8,7 @@ Storytelling involves reduction and visualization of the large collection to som
 
 > For more information on how this algorithm works, see: Y. AlNoamany, M. C. Weigle, and M. L. Nelson. 2017. Generating Stories From Archived Collections. In Proceedings of the 2017 ACM on Web Science Conference. https://doi.org/10.1145/3091478.3091508
 
-We will use the [Off-Topic Memento Toolkit (OTMT)](https://pypi.org/project/otmt/) to help us perform this reduction.
+We will use the [Off-Topic Memento Toolkit (OTMT)](https://pypi.org/project/otmt/) to help us perform this reduction with [Archive-It collection 3649 "2013 Boston Marathon Bombing"](https://archive-it.org/collections/3649).
 
 ## Step 1: Excluding Off-Topic Pages
 
