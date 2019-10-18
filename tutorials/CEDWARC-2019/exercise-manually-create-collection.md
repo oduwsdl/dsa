@@ -18,4 +18,11 @@ Steps for this exercise:
 4. Review the collection to see what you can find.
 5. In this case, record the URLs of 5 mementos that you think will help you answer the questions of your story
 
-[Next](exercise-manually-create-collection-discussion.md)
+## Discussion
+
+* What questions does your story answer?
+* What questions did you leave out?
+* Is there bias in your story?
+* How well do you think your story covered the underlying collection?
+
+[Back to Table of Contents](Readme.md)
