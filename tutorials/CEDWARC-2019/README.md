@@ -4,9 +4,7 @@
 
  ![DSA Logo](https://oduwsdl.github.io/raintale/img/dsa-logo-monochrome-wb.png)
 
-* Installing the Off-Topic Memento Toolkit (OTMT) on an AWS Instance (coming soon)
-* Installing MementoEmbed on an AWS Instance (coming soon)
-* Installing Raintale on an AWS Instance (coming soon)
+* [Installing the Off-Topic Memento Toolkit (OTMT), MementoEmbed, and Raintale on an AWS Instance](installing-otmt-mementoembed-raintale-aws.md)
 * [Manually gathering resources from an Archive-It collection](exercise-manually-create-collection.md)
 * [Automatically generating story resources with AlNoamany's Algorithm](exercise-automatically-generating-story-resources.md)
 * [Automatically visualizing a single memento](exercise-visualize-single-memento.md)
