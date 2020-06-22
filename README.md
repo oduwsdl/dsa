@@ -2,7 +2,7 @@
 
 ![DSA Dark Logo](https://oduwsdl.github.io/dsa-puddles/assets/img/dsa-logo-monochrome-wb.png)
 
-This is the central repository for the Dark and Stormy Archives Project. The Dark and Stormy Archives (DSA) project exists to provide storytelling solutions to improve the understanding of web archive collections. With search engines, collection users must first have a query in mind. What if the user does not know enough about the collection to form a query? Our goal is to provide a "summary of summaries" in the form of social media storytelling that describes a collection sufficiently for a user to decide if that collection merits further time.
+This is the central repository for the [Dark and Stormy Archives Project](https://oduwsdl.github.io/dsa/). The Dark and Stormy Archives (DSA) project exists to provide storytelling solutions to improve the understanding of web archive collections. With search engines, collection users must first have a query in mind. What if the user does not know enough about the collection to form a query? Our goal is to provide a "summary of summaries" in the form of social media storytelling that describes a collection sufficiently for a user to decide if that collection merits further time.
 
 While other repositories associated with the DSA may contain code for specific components, this repository contains scripts, lessons, and other documentation that ties everything together.
 
@@ -18,7 +18,3 @@ While other repositories associated with the DSA may contain code for specific c
 
 * `algorithms` - overarching documentation and scripts about using these tools to implement specific algorithms
 * `tutorials` - lessons on how archivists can leverage applications from the DSA toolkit to solve various problems
-
-
-
-
