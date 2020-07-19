@@ -6,12 +6,14 @@ set -e
 set -x
 
 if [ -z $1 ]; then
-    sg_month=`date '+%m'`
-    sg_date=`date '+%d'`
-    sg_year=`date '+%Y'`
-    sg_hour=`date '+%H'`
-    sg_minute=`date '+%m'`
-    sg_second=`date '+%S'`
+    # sg_month=`date '+%m'`
+    # sg_date=`date '+%d'`
+    # sg_year=`date '+%Y'`
+    # sg_hour=`date '+%H'`
+    # sg_minute=`date '+%m'`
+    # sg_second=`date '+%S'`
+    echo "user must specify a date in YYYY-MM-DD format"
+    exit
 else
     sg_date=`echo $1 | awk -F- '{ print $3 }'`
     sg_month=`echo $1 | awk -F- '{ print $2 }'`
@@ -24,20 +26,38 @@ fi
 post_date="${sg_year}-${sg_month}-${sg_date}"
 
 if [ -z $2 ]; then
-    working_directory=`mktemp -d -t storygraph-stories-`
+    # working_directory=`mktemp -d -t storygraph-stories-`
+    echo "user must specify a working directory"
+    exit
 else
-    working_directory=$2/${post_date}
+    working_directory="$2/${post_date}"
     mkdir -p ${working_directory}
 fi
 
 if [ -z $3 ]; then
+    echo "user must specify a template file for SHARI story"
+    exit
+else
+    template_filename="$3"
+fi
+
+if [ -z $4 ]; then
+    echo "user must specify an output file"
+    exit
+else
+    output_file=$4
+fi
+
+if [ -z $5 ]; then
     mementoembed_endpoint="http://localhost:5550"
 else
-    mementoembed_endpoint=$3
+    mementoembed_endpoint=$5
 fi
 
 echo "`date` --- using working directory ${working_directory}"
 echo "`date` --- using year: ${sg_year} ; month: ${sg_month}; date: ${sg_date}"
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 original_resource_file=${working_directory}/story-original-resources.tsv
 mementos_file=${working_directory}/story-mementos.tsv
@@ -46,8 +66,8 @@ sumgram_report=${working_directory}/sumgram_data.tsv
 image_report=${working_directory}/imagedata.json
 sorted_mementos_file=${working_directory}/sorted-story-mementos.tsv
 story_data_file=${working_directory}/raintale-story.json
-jekyll_story_file=_posts/${post_date}-storygraph-bigstory.html
-small_striking_image=assets/img/storygraph_striking_images/${post_date}.png
+# small_striking_image=assets/img/storygraph_striking_images/${post_date}.png
+stopword_file="${script_dir}/../stopwords.txt"
 
 # 1. query StoryGraph service for rank r story of the day
 if [ ! -e ${original_resource_file} ]; then
@@ -87,7 +107,7 @@ fi
 # 4. Generate sumgram report
 if [ ! -e ${sumgram_report} ]; then
     echo "`date` --- executing command"
-    hc report terms -i mementos -a ${mementos_file} -cs mongodb://localhost/csStoryGraph -o ${sumgram_report} --sumgrams
+    hc report terms -i mementos -a ${mementos_file} -cs mongodb://localhost/csStoryGraph -o ${sumgram_report} --sumgrams --added-stopwords ${stopword_file}
 else
     echo "already discovered ${sumgram_report} so moving on to next command..."
 fi
@@ -117,47 +137,10 @@ else
 fi
 
 # 8. Generate Jekyll HTML file for the day's rank r story
-if [ ! -e ${jekyll_story_file} ]; then
+if [ ! -e ${output_file} ]; then
     echo "`date` --- executing command:::"
     sg_url=`cat ${working_directory}/sg.url.txt`
-    tellstory -i ${story_data_file} --storyteller template --story-template raintale-templates/storygraph-story.html -o ${jekyll_story_file} --collection-url ${sg_url} --generation-date ${post_date}T${sg_hour}:${sg_minute}:${sg_second} --mementoembed_api ${mementoembed_endpoint}
+    tellstory -i ${story_data_file} --storyteller template --story-template ${template_filename} -o ${output_file} --collection-url ${sg_url} --generation-date ${post_date}T${sg_hour}:${sg_minute}:${sg_second} --mementoembed_api ${mementoembed_endpoint}
 else
-    echo "already created story at ${jekyll_story_file}"
+    echo "already created story at ${output_file}"
 fi
-
-# extra - swap the striking image with a smaller thumbnail so that the main page will load faster
-if [ ! -e ${small_striking_image} ]; then
-    striking_image_url=`grep "^img:" ${jekyll_story_file} | awk '{ print $2 }'`
-
-    if [ ! -e ${working_directory}/${post_date}-striking-image.dat ]; then
-        wget -O ${working_directory}/${post_date}-striking-image.dat ${striking_image_url}
-        # TODO: download again if size is 0
-    else
-        echo "already downloaded image from ${striking_image_url}"
-    fi
-
-    if [ ! -e ${working_directory}/${post_date}-striking-image-origsize.png ]; then
-        convert ${working_directory}/${post_date}-striking-image.dat ${working_directory}/${post_date}-striking-image-origsize.png
-    else
-        echo "already converted image to PNG"
-    fi
-
-    if [ ! -e ${small_striking_image} ]; then
-        convert ${working_directory}/${post_date}-striking-image-origsize.png -resize 368.391x245.531 ${small_striking_image}
-    else
-        echo "already resized image"
-    fi
-
-else
-    echo "already generated smaller striking image for ${small_striking_image}"
-fi
-
-# extra - fix the image every time in case we are rerun
-sed -i '' -e "s|^img: .*$|img: /dsa-puddles/${small_striking_image}|g" ${jekyll_story_file}
-
-# 9. Publish to GitHub Pages
-# git pull
-# git add ${jekyll_story_file}
-# git add ${small_striking_image}
-# git commit -m "adding storygraph story for ${post_date}"
-# git push
