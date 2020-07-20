@@ -85,9 +85,9 @@ fi
 # extra - fix the image every time in case we are rerun
 sed -i '' -e "s|^img: .*$|img: /dsa-puddles/${small_striking_image}|g" ${jekyll_story_file}
 
-# cd ${dsa_puddles_directory}
-# git pull
-# git add ${jekyll_story_file}
-# git add ${small_striking_image}
-# git commit -m "adding storygraph story for ${post_date}"
-# git push
+cd ${dsa_puddles_directory}
+git pull
+git add ${jekyll_story_file}
+git add ${small_striking_image}
+git commit -m "adding storygraph story for ${post_date}"
+git push
