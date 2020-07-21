@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+
+    mementoembed:
+        image: oduwsdl/mementoembed:latest
+        restart: "no"
+
+    mongodb:
+        image: mongo:latest
+        restart: "no"
+
+    raintale:
+        depends_on:
+            - mementoembed
+        image: oduwsdl/raintale:latest
+        restart: always
+        volumes: 
+            - .:/raintale-work
+        stdin_open: true
+        environment:
+            - MEMENTOEMBED_API_ENDPOINT=http://mementoembed:5550
+
+    hypercane:
+        depends_on:
+            - mongodb
+        image: oduwsdl/hypercane:latest
+        build: ./
+        command: bash
+        restart: always
+        volumes:
+            - .:/hypercane-work
+        stdin_open: true
+        environment:
+            - HC_CACHE_STORAGE=mongodb://mongodb/csHC
+        
+    sgtk:
+        image: sgtk:dev
+        restart: always
+        volumes: 
+            - .:/sgtk-work
+        stdin_open: true
