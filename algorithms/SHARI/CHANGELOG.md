@@ -2,6 +2,10 @@
 
 As the SHARI process evolves, this CHANGELOG will keep track of the changes to the individual tools, scripts, and relationships to the platforms that support the process.
 
+## 2020-07-21
+
+* SHARI scripts now completely rely upon Docker images for the components
+
 ## 2020-07-19
 
 * tested with new version of sumgram, but encountered issues, so rolled back to sumgram v0.0.16

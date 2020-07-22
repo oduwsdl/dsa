@@ -1,32 +1,35 @@
 #!/bin/bash
 
-export PATH=/usr/local/bin:$PATH
+if [ -z $1 ]; then
+    echo "date is missing, first argument must be a date in YYYY-MM-DD format"
+else
+    post_date=$1
+fi
 
-stop_mementoembed () {
-    docker stop mementoembed
-    docker rm mementoembed
-}
+if [ -z $2 ]; then
+    echo "working directory is missing, second argument must be a working directory"
+else
+    working_directory=$2
+    working_directory=${working_directory}/${post_date}
+fi
 
-restart_mementoembed () {
-    stop_mementoembed
-    docker run -d --name mementoembed -p 5550:5550 oduwsdl/mementoembed:latest
-    sleep 20
-}
-
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-source /usr/local/bin/virtualenvwrapper.sh
-
-post_date=$1
-working_directory=$2
-dsa_puddles_directory=$3
-
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+if [ -z $3 ]; then
+    echo "puddles directory is missing, third argument must be where you cloned the DSA Puddles repository"
+else
+    dsa_puddles_directory=$3
+fi
 
 jekyll_story_file="${dsa_puddles_directory}/_posts/${post_date}-storygraph-bigstory.html"
 small_striking_image="${dsa_puddles_directory}/assets/img/storygraph_striking_images/${post_date}.png"
 
-if [ -n ${3+x} ]; then
-    if [ "$3" == "--purge" ]; then
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+if [ ! -d ${working_directory} ]; then
+    mkdir -p ${working_directory}
+fi
+
+if [ -n ${4+x} ]; then
+    if [ "$4" == "--purge" ]; then
         rm -rf ${working_directory}
         rm ${jekyll_story_file}
         rm ${small_striking_image}
@@ -34,34 +37,40 @@ if [ -n ${3+x} ]; then
     fi
 fi
 
-restart_mementoembed
+cd ${working_directory}
 
-workon storygraph-stories
+if [ ! -e ./docker-compose.yml ]; then
+    ln -s ${script_dir}/../docker-compose.yml .
+fi
 
-# first run
-${script_dir}/create_storygraph_story.sh ${post_date} ${working_directory} ${script_dir}/../templates/storygraph-story.html ${jekyll_story_file} > /Users/smj/Unsynced-Projects/dsa-puddles-logs/storygraph-biggest-`date '+%Y%m%d%H%M%S'`.log 2>&1
+if [ ! -e ./stopwords.txt ]; then
+    cp ${script_dir}/../stopwords.txt . # docker can't follow symlinks
+fi
 
-# # # second run to potentially encourage the Internet Archive to archive some images
-# sleep 1800
-# rm ${jekyll_story_file}
-# restart_mementoembed
-# ${script_dir}/create_storygraph_story.sh ${post_date} ${working_directory} > /Users/smj/Unsynced-Projects/dsa-puddles-logs/storygraph-biggest-`date '+%Y%m%d%H%M%S'`.log 2>&1
+if [ ! -e ./create_storygraph_story.sh ]; then
+    ln -s ${script_dir}/create_storygraph_story.sh .    
+fi
 
-# # # third run to potentially encourage the Internet Archive to archive some images
-# sleep 1800
-# rm ${jekyll_story_file}
-# restart_mementoembed
-# ${script_dir}/create_storygraph_story.sh ${post_date} ${working_directory} > /Users/smj/Unsynced-Projects/dsa-puddles-logs/storygraph-biggest-`date '+%Y%m%d%H%M%S'`.log 2>&1
+./create_storygraph_story.sh ${post_date} . ${script_dir}/../templates/shari-story.html story-output.html > shari-process-`date '+%Y%m%d%H%M%S'`.log  2>&1
 
-stop_mementoembed
+if [ ! -e story-output.html ]; then
+    echo "Failed to produce story output, exiting..."
+    exit 255
+fi
+
+cp story-output.html ${jekyll_story_file}
 
 # swap the striking image with a smaller thumbnail so that the main page will load faster
 if [ ! -e ${small_striking_image} ]; then
     striking_image_url=`grep "^img:" ${jekyll_story_file} | awk '{ print $2 }'`
 
     if [ ! -e ${working_directory}/${post_date}-striking-image.dat ]; then
-        wget -O ${working_directory}/${post_date}-striking-image.dat ${striking_image_url}
-        # TODO: download again if size is 0
+
+        if [ -n ${striking_image_url} ]; then
+            wget -O ${working_directory}/${post_date}-striking-image.dat ${striking_image_url}
+            # TODO: download again if size is 0
+        fi
+
     else
         echo "already downloaded image from ${striking_image_url}"
     fi
@@ -82,8 +91,7 @@ else
     echo "already generated smaller striking image for ${small_striking_image}"
 fi
 
-# extra - fix the image every time in case we are rerun
-sed -i '' -e "s|^img: .*$|img: /dsa-puddles/${small_striking_image}|g" ${jekyll_story_file}
+sed -i '' -e "s|^img: .*$|img: /dsa-puddles/assets/img/storygraph_striking_images/${post_date}.png|g" ${jekyll_story_file}
 
 cd ${dsa_puddles_directory}
 git pull
@@ -91,3 +99,4 @@ git add ${jekyll_story_file}
 git add ${small_striking_image}
 git commit -m "adding storygraph story for ${post_date}"
 git push
+
