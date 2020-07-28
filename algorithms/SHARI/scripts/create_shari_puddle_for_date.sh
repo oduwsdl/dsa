@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=/usr/local/bin:$PATH
+
 if [ -z $1 ]; then
     echo "date is missing, first argument must be a date in YYYY-MM-DD format"
 else
