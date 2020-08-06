@@ -87,6 +87,10 @@ fi
 # 2. Create URI-Ms from URI-Rs
 if [ ! -e ${mementos_file} ]; then
     docker-compose run hypercane hc identify mementos -i original-resources -a ${original_resource_file} -o ${mementos_file}
+    sleep 300
+    docker-compose run hypercane hc identify mementos -i original-resources -a ${original_resource_file} -o ${mementos_file}
+    sleep 300
+    docker-compose run hypercane hc identify mementos -i original-resources -a ${original_resource_file} -o ${mementos_file}
 else
     echo "already discovered ${mementos_file} so moving on to next command..."
 fi

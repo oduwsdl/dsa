@@ -2,6 +2,14 @@
 
 As the SHARI process evolves, this CHANGELOG will keep track of the changes to the individual tools, scripts, and relationships to the platforms that support the process.
 
+## 2020-08-06
+
+* added "flipboard advertisements" to stopword list
+
+## 2020-08-03
+
+* create_storygraph_story.sh now reruns the memento creation step 3 times 5 minutes apart in hopes that the Internet Archive will stop returning 500 status codes in the interim 
+
 ## 2020-07-21
 
 * SHARI scripts now completely rely upon Docker images for the components
