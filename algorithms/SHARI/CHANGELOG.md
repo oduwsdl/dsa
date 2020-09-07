@@ -2,6 +2,10 @@
 
 As the SHARI process evolves, this CHANGELOG will keep track of the changes to the individual tools, scripts, and relationships to the platforms that support the process.
 
+## 2020-09-06
+
+* updated StoryGraph Toolkit to v0.0.6
+
 ## 2020-08-06
 
 * added "flipboard advertisements" to stopword list
