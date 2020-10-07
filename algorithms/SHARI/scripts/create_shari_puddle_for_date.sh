@@ -93,7 +93,15 @@ else
     echo "already generated smaller striking image for ${small_striking_image}"
 fi
 
-sed -i '' -e "s|^img: .*$|img: /dsa-puddles/assets/img/storygraph_striking_images/${post_date}.png|g" ${jekyll_story_file}
+myos=`uname`
+
+if [ $myos == "Darwin" ]; then
+    sed -i '' -e "s|^img: .*$|img: /dsa-puddles/assets/img/storygraph_striking_images/${post_date}.png|g" ${jekyll_story_file}
+fi
+
+if [ $myos == "Linux" ]; then
+    sed -i -e "s|^img: .*$|img: /dsa-puddles/assets/img/storygraph_striking_images/${post_date}.png|g" ${jekyll_story_file}
+fi
 
 cd ${dsa_puddles_directory}
 git pull

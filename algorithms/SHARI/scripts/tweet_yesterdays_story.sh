@@ -2,18 +2,21 @@
 
 # echo "starting script"
 
-DATE_YESTERDAY=`/usr/local/bin/gdate --date "yesterday" '+%Y-%m-%d'`
+WORKING_DIRECTORY=$1
+#DATE_YESTERDAY=`date --date "yesterday" '+%Y-%m-%d'`
+DATE_YESTERDAY=$2
+CREDENTIALS_FILE=$3
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 post_date=${DATE_YESTERDAY}
 
-working_dir="/Volumes/nerfherder-external/Unsynced-Projects/shari-working/${post_date}"
+working_dir="${WORKING_DIRECTORY}/${post_date}"
 
 # echo "using post date ${post_date}"
 
-human_readable_date=`/usr/local/bin/gdate --date "${post_date}" '+%A, %B %e, %Y'`
-directory_date=`/usr/local/bin/gdate --date "${post_date}" '+%Y/%m/%d'`
+human_readable_date=`date --date "${post_date}" '+%A, %B %e, %Y'`
+directory_date=`date --date "${post_date}" '+%Y/%m/%d'`
 
 sumgrams=`cat ${working_dir}/sumgram_data.tsv | awk -F'\t' '{ print $1 " (" $2 ")" }' | head -n 6 | tail -n 5 | tr '\n' ',' | sed 's/,$//g' | sed 's/,/, /g'`
 
@@ -24,13 +27,14 @@ post_message="From the SHARI process: @storygraphbot's biggest news story for ye
 
 echo "using post message: ${post_message}"
 
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+# these may need to be changed depending on environment
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
 workon shari
 
 echo 
 
-python ${script_dir}/tweet_if_post_present.py ~/Unsynced-Projects/dsa-credentials/twitter-credentials.yaml "${post_url}" "${post_message}"
+python ${script_dir}/tweet_if_post_present.py "${CREDENTIALS_FILE}" "${post_url}" "${post_message}"
 
 # > /Users/smj/Unsynced-Projects/dsa-puddles-logs/tweeting-storygraph-biggest-`date '+%Y%m%d%H%M%S'`.log 2>&1
 

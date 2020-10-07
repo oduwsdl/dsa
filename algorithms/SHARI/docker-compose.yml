@@ -39,4 +39,5 @@ services:
         restart: always
         volumes: 
             - .:/sgtk-work
+            - /etc/resolv.conf:/etc/resolv.conf
         stdin_open: true
