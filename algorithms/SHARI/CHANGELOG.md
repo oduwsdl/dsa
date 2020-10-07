@@ -2,6 +2,18 @@
 
 As the SHARI process evolves, this CHANGELOG will keep track of the changes to the individual tools, scripts, and relationships to the platforms that support the process.
 
+## 2020-09-16
+
+* removed machine-specific path from twitter script (committed on 10/7)
+
+## 2020-09-13
+
+* updated striking image download and post assignment for SHARI DSA puddles to adapt to Linux sed and macOS sed (committed on 10/7)
+
+## 2020-09-11
+
+* ODUCS updated docker-compose.yml to use the host machine's resolv.conf for DNS resolution in restricted environments
+
 ## 2020-09-06
 
 * updated StoryGraph Toolkit to v0.0.6
