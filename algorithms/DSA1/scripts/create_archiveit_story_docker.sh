@@ -74,7 +74,7 @@ if [ ! -e ${mementos_file} ]; then
     docker-compose run hypercane hc sample dsa1 -i archiveit -a ${collection_id} \
         --working-directory ${working_directory} \
         -l ${working_directory}/${collection_id}-`date '+%Y%m%d%H%M%S'`.log \
-        --memento-damage-url http://mementodamage:32768 \
+        --memento-damage-url http://mementodamage:80 \
         -o ${mementos_file} -e ${errorfile}
 
 else
