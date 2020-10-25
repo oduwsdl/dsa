@@ -10,6 +10,14 @@ This process has the following tool dependencies:
 * AIU
 * Memento Damage Service
 
+## 2020-10-25
+
+* updated docker-compose.yml to use the host machine's disk for storage of the MongoDB cache
+
+## 2020-10-21
+
+* updated [Hypercane](https://oduwsdl.github.io/hypercane/) to deal with raw mementos that have HTTP redirects
+
 ## 2020-06-03
 
 * released [Hypercane](https://oduwsdl.github.io/hypercane/) for intelligently sampling mementos from web archive collections

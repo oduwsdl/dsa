@@ -9,6 +9,8 @@ services:
     mongodb:
         image: mongo:latest
         restart: "no"
+        volumes:
+            - ./cache-data:/data/db
 
     mementodamage:
         image: erikaris/memento-damage:latest
