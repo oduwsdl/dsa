@@ -37,7 +37,7 @@ By default Raintale will display your story as a series of MementoEmbed social c
 
 ## What is happening with Raintale and MementoEmbed?
 
-![MementoEmbed and Raintale](images/mementoembed-and-raintale.png)
+![MementoEmbed and Raintale](https://github.com/oduwsdl/dsa/raw/master/tutorials/CEDWARC-2019/images/mementoembed-and-raintale.png)
 
 Raintale reads the template or the storyteller preset you selected for variables needed for your story.
 
