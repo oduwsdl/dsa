@@ -11,7 +11,7 @@ Docker is the intended platform for which we intended these services to be run. 
 3. Open a terminal
 4. Change to the directory you created in step 1
 ```
-cd dsa-tutorial
+cd hypercane-tutorial
 ```
 5. Type the following command:
 ```
@@ -131,7 +131,10 @@ Raintale requires MementoEmbed. If you have already followed the previous sectio
 2. Download the file `docker-compose.yml` from https://raw.githubusercontent.com/oduwsdl/raintale/master/docker-compose.yml and save it to that folder
 3. Open a terminal
 4. Change to the directory you created in step 1
-5. Type the following command:
+```
+cd raintale-tutorial
+```
+6. Type the following command:
 ```
 docker-compose run raintale tellstory --help
 ```
