@@ -4,7 +4,7 @@
 
  ![DSA Logo](https://oduwsdl.github.io/raintale/img/dsa-logo-monochrome-wb.png)
 
-* [Installing the Off-Topic Memento Toolkit (OTMT), MementoEmbed, and Raintale with Docker](installing-hypercane-mementoembed-raintale-docker.md)
+* [Installing Hypercane, MementoEmbed, and Raintale with Docker](installing-hypercane-mementoembed-raintale-docker.md)
 * [Manually gathering resources from an Archive-It collection](exercise-manually-create-collection.md)
 * [Automatically generating story resources with AlNoamany's Algorithm](exercise-automatically-generating-story-resources.md)
 * [Automatically visualizing a single memento](exercise-visualize-single-memento.md)
