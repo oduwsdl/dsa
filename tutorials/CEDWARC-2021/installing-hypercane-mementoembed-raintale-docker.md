@@ -1,4 +1,4 @@
-# Installing the Off-Topic Memento Toolkit (OTMT), MementoEmbed, and Raintale with Docker
+# Installing Hypercane, MementoEmbed, and Raintale with Docker
 
 Docker is the intended platform for which we intended these services to be run. We use Docker because it provides all necessary dependencies in a single package rather than asking you to chase down and download dependencies for yourself.  [Install the free Docker desktop to before following the rest of this tutorial](https://docs.docker.com/get-docker/).
 
@@ -116,7 +116,7 @@ For each of these actions, you can view additional help by typing --help after t
 Shutting down Hypercane involves removing its running container.
 
 ```
-docker-compose rm -rf
+docker-compose rm -f
 ```
 
 Note: the MongoDB container will continue running so it is ready for you to run Hypercane in the future.
@@ -254,7 +254,7 @@ Again, the first part of this output will only appear the first time you run `do
 Shutting down Raintale involves removing its running container.
 
 ```
-docker-compose rm -rf
+docker-compose rm -f
 ```
 
 ## MementoEmbed
