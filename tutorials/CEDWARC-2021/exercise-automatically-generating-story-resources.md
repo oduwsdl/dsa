@@ -10,12 +10,20 @@ Storytelling involves reduction and visualization of the large collection to som
 
 We will use [Hypercane](https://oduwsdl.github.io/hypercane/) to help us perform this reduction with [Archive-It collection 3649 "2013 Boston Marathon Bombing"](https://archive-it.org/collections/3649).
 
+## Step 0: Identifying TimeMaps
+
+1. Open a terminal
+2. Type the following:
+```
+docker-compose run hypercane hc identify timemaps -i archiveit -a 3649 -o timemaps.tsv -l identify-timemaps.log
+```
+
 ## Step 1: Excluding Off-Topic Pages
 
 1. Open a terminal
 2. Type the following:
 ```
-detect_off_topic -i archiveit=3649 -o 3649-otmt.json --ontopic-file 3649-ontopic.txt
+docker-compose run hypercane hc filter include-only on-topic -i timemaps -a timemaps.tsv -o ontopic.tsv -l include-only-ontopic.log
 ```
 3. When the prompt returns, the command has finished executing.
 
@@ -30,31 +38,31 @@ detect_off_topic -i archiveit=3649 -o 3649-otmt.json --ontopic-file 3649-ontopic
 
 This command downloads the seed mementos for the collection and runs similarity metrics on these mementos to detect mementos that are off-topic. The arguments to the command above have the following meanings:
 
-* `-i archiveit=3649` tells the OTMT to download Archive-It collection 3649, the `-i` command also takes other values, like `timemap` or `warc`
-* `-o 3649-otmt.json` tells the OTMT to store output in the file `3649-otmt.json`
-* `--ontopic-file 3649-ontopic.txt` tells the OTMT to place the list of mementos that are on-topic in the file `3649-ontopic.txt`
-
-The working directory for the story files grows as the size of the collection grows. Some examples:
-* a collection with 374 seed mementos takes up 35 MB
-* a collection with 31,863 seed mementos takes up 3.6 GB
+* `include-only on-topic` is an action instructing Hypercane to only include mementos that are on-topic
+* `-i timamaps` tells Hypercane that the input consists of a list of TimeMap URIs (URI-Ts)
+* `-a timemaps.tsv` tells Hypercane to use the file generated from the previous step as a list of URI-Ts
+* `-o ontopic.tsv` tells Hypercane to save the list of mementos that are on-topic to a file named `ontopic.tsv`
+* `-l include-only-ontopic.log` tells Hypercane to save log messages to a file named `include-only-ontopic.log`
 
 This can take a long time depending on the size of the collection. Some examples:
 * a collection with 374 seed mementos took 1 minute, 56 seconds
 * a collection with 31,863 seed mementos took 3 hours 17 minutes 11 seconds
 * For this reason, we will work with output from an existing run...
 
-> For an analysis of the Off-Topic Memento Toolkit (OTMT), see: S. M. Jones, M. C. Weigle, and M. L. Nelson. 2018. The Off-Topic Memento Toolkit. In International Conference on Digital Preservation (iPRES) 2018. https://doi.org/10.17605/OSF.IO/UBW87
+> Under the hood, Hypercane uses the Off-Topic Memento Toolkit to perform this step. For an analysis of the Off-Topic Memento Toolkit (OTMT), see: S. M. Jones, M. C. Weigle, and M. L. Nelson. 2018. The Off-Topic Memento Toolkit. In International Conference on Digital Preservation (iPRES) 2018. https://doi.org/10.17605/OSF.IO/UBW87
 
 ## Step 2: Excluding Duplicate Mementos
 
 Using the same terminal, type the following:
 ```
-exclude_duplicates -i 3649-otmt.json -c 3649-ontopic.txt -o 3649-nonduplicates.txt
+docker-compose run hypercane hc filter exclude near-duplicates -i mementos -a ontopic.tsv -o non-duplicates.tsv -l exclude-near-duplicates.log
 ```
- 
-* `3649-otmt.json` is data about collection 3649 generated in the previous section
-* The `-c` argument takes in the list of on-topic mementos stored in file `3649-ontopic.txt` generated in the previous section
-* The `-o` argument stores the output in the file `3649-nonduplicates.txt` which contains the list of mementos that are not duplicates, it will be used in the next step
+
+* `exclude near-duplicates` is an action telling Hypercane to remove near-duplicate mementos from the input
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a ontopic.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o non-duplicates.tsv` tells Hypercane to save the list of non-duplicate mementos to a file named `non-duplicates.tsv`
+* `-l exclude-near-duplicates.log` tells Hypercane to save log messages to a file named `exclude-near-duplicates.log`
 
 **Why Remove Duplicates?**
 
@@ -62,7 +70,7 @@ exclude_duplicates -i 3649-otmt.json -c 3649-ontopic.txt -o 3649-nonduplicates.t
 * Sometimes the web page did not change
 * These duplicates are extras that we do not need in our story
 
-![Example of duplicate mementos](images/duplicates.png)
+![Example of duplicate mementos](https://raw.githubusercontent.com/oduwsdl/dsa/master/tutorials/CEDWARC-2019/images/duplicates.png)
 
 The above figure contains thumbnails of duplicate mementos, grouped by color. Mementos outlined in red are the same, green are the same, etc.
 
@@ -70,16 +78,19 @@ The above figure contains thumbnails of duplicate mementos, grouped by color. Me
 
 Type the following:
 ```
-select_by_language -i 3649-otmt.json -c 3649-nonduplicates.txt --lang en -o 3649-lang.en.txt
+docker-compose run hypercane hc filter include-only languages --lang en -i mementos -a non-duplicates.tsv -o english-only.tsv -l include-only-english.log
 ```
 
-* `3649-otmt.json` is data about collection 3649 generated in the previous section
-* `3649-nonduplicates.txt` contains the list of mementos that are not duplicates from the previous step
-* `3649-lang.en.txt` contains the list of mementos that are not duplicates and are English language, it will be used in the next step
+* `include-only languages` is an action telling Hypercane to only include mementos whose language matches the ones provided by the `--lang` argument
+* `--lang en` is the list of languages to include, in this case English (`en`)
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a non-duplicates.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o english-only.tsv` tells Hypercane to save the list of english-only URI-Ms to `english-only.tsv`
+* `-l include-only-english.log` tells Hypercane to save log messages to a file named `include-only-english.log`
 
 **Why keep mementos with the same language?**
 
-![Example of mementos in different languages](images/languages.png)
+![Example of mementos in different languages](https://raw.githubusercontent.com/oduwsdl/dsa/master/tutorials/CEDWARC-2019/images/languages.png)
 
 We typically want to tell stories with a single language.
 
@@ -87,12 +98,14 @@ We typically want to tell stories with a single language.
 
 Type the following:
 ```
-slice_by_datetime -i 3649-otmt.json -c 3649-lang.en.txt -o 3649-sliced.tsv
+docker-compose run hypercane hc cluster time-slice -i mementos -a english-only.tsv -o sliced.tsv -l time-slicing.log
 ```
 
-* `3649-otmt.json` is data about collection 3649 generated in the previous section
-* `3649-lang.en.txt` contains the list of on-topic mementos that are not duplicates and are English language from the previous step
-* `3649-sliced.tsv` contains a tab-delimited list of memento URLs and their slice numbers, it will be used in the next step
+* `cluster time-slice` is an action telling Hypercane to slice the collection by memento-datetime (when each memento was captured)
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a english-only.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o sliced.tsv` tells Hypercane to save the list of sliced URI-Ms to `sliced.tsv`, this file consists of the URI-Ms and their slice numbers
+* `-l time-slicing.log` tells Hypercane to save log messages to a file named `time-slicing.log`
 
 **Why slice the collection?**
 
@@ -109,12 +122,15 @@ This way the size of the story grows slowly as needed for large collections
 
 Type the following:
 ```
-cluster_by_simhash -i 3649-otmt.json -s 3649-sliced.tsv -o 3649-clustered.tsv
+docker-compose run hypercane hc cluster dbscan --feature tf-simhash  -i mementos -a sliced.tsv -o sliced-and-clustered.tsv -l time-sliced-and-dbscan-clustered.log
 ```
 
-* `3649-otmt.json` is data about collection 3649 generated in the previous section
-* `3649-sliced.tsv` contains a tab-delimited list of memento URLs and their slice numbers from the previous step
-* `3649-clustered.tsv` contains a tab-delimited list of memento URLs with their slices and clusters, it will be used in the next step
+* `cluster dbscan` is an action telling Hypercane to cluster the collection with the DBSCAN algorithm
+* `--feature tf-simhash` tells Hypercane to apply DBSCAN to the Term Frequency Simhash distance of each memento from each other
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a sliced.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o sliced-and-clustered.tsv` tells Hypercane to save the list of sliced URI-Ms to `sliced-and-clustered.tsv`, this file consists of the URI-Ms their slice numbers from the previous step, and their cluster numbers from this step
+* `-l time-sliced-and-dbscan-clustered.log` tells Hypercane to save log messages to a file named `time-sliced-and-dbscan-clustered.log`
 
 **Why cluster the slices?**
 
@@ -141,14 +157,41 @@ Sometimes, when crawling, a web archive does not acquire all of the images, styl
 
 Type the following:
 ```
-select_high_quality -i 3649-clustered.tsv --damage-uri http://localhost:8888 –o 3649-story-mementos.txt
+docker-compose run hypercane hc score dsa1-scoring -i mementos -a sliced-and-clustered.tsv -o scored.tsv -l dsa1-scored.log
 ```
 
-> Leave out the --damage-uri http://localhost:8888 for today
+* `score dsa1-scoring` is an action telling Hypercane to score the collection by AlNoamany's scoring function
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a sliced-and-clustered.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o scored.tsv` tells Hypercane to save the list of sliced URI-Ms to `scored.tsv`, this file consists of the URI-Ms their slice and cluster numbers previous steps, and their scores from this step
+* `-l dsa1-scoring.log` tells Hypercane to save log messages to a file named `dsa1-scoring.log`
 
-* `3649-clustered.tsv` contains the list of mementos, their slices, and their clusters from the previous step
-* `3649-story_mementos.txt` contains the list of memento URLs for our story
+## Step 7: Keep Highest Scoring Pages From Each Cluster
 
-With this list, we can now visualize our story
+Type the following:
+```
+docker-compose run hypercane hc filter include-only highest-score-per-cluster -i mementos -a scored.tsv -o highest-scored.tsv -l highest-scored-per-cluster.log
+```
+
+* `include-only highest-score-per-cluster` is an action telling Hypercane to include only the memento from each cluster that scored highest
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a scored.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o highest-scored.tsv` tells Hypercane to save the list of sliced URI-Ms to `highest-scored.tsv`, this file consists of the URI-Ms their slice and cluster numbers previous steps, and their scores from this step
+* `-l highest-scored-per-cluster.log` tells Hypercane to save log messages to a file named `highest-scored-per-cluster.log`
+
+### Step 8: Ordering the Mementos By Memento-Datetime
+
+Type the following:
+```
+docker-compose run hypercane hc order pubdate-else-memento-datetime -i mementos -a highest-scored.tsv -o ordered.tsv -l ordered-mementos.log
+```
+
+* `order pubdate-else-memento-datetime` is an action telling Hypercane to include only the memento from each cluster that scored highest
+* `-i mementos` tells Hypercane that the input consists of a list of memento URIs (URI-Ms)
+* `-a highest-scored.tsv` tells Hypercane to use the file from the previous step as a list of URI-Ms
+* `-o ordered.tsv` tells Hypercane to save the list of sliced URI-Ms to `ordered.tsv`, this file consists of the URI-Ms their slice and cluster numbers previous steps, and their scores from this step
+* `-l ordered-mementos.log` tells Hypercane to save log messages to a file named `ordered-mementos.log`
+
+With this list in `ordered.tsv`, we can now visualize our story
 
 [Back to Table of Contents](README.md)
