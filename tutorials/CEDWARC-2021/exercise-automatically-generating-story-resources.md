@@ -18,6 +18,12 @@ We will use [Hypercane](https://oduwsdl.github.io/hypercane/) to help us perform
 docker-compose run hypercane hc identify timemaps -i archiveit -a 3649 -o timemaps.tsv -l identify-timemaps.log
 ```
 
+* `identify timemaps` is an action instructing Hypercane to identify the TimeMap URIs (URI-Ts) from the input
+* `-i archiveit` tells Hypercane that the input consists of an Archive-It collection identifier
+* `-a 3649` tells Hypercane to process Archive-It collection 3649
+* `-o timemaps.tsv` tells Hypercane to save the URI-Ts to a file named `timemaps.tsv`
+* `-l identify-timemaps.log` tells Hypercane to save log messages to a file named `identify-timemaps.log`
+
 ## Step 1: Excluding Off-Topic Pages
 
 1. Open a terminal
