@@ -34,7 +34,7 @@ services:
         depends_on:
             - mongodb
             - mementodamage
-        image: hypercane:dev
+        image: oduwsdl/hypercane:latest
         build: ./
         command: bash
         restart: always
