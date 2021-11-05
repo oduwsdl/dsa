@@ -15,20 +15,23 @@ working_dir="${WORKING_DIRECTORY}/${post_date}"
 
 # echo "using post date ${post_date}"
 
-human_readable_date=`date --date "${post_date}" '+%A, %B %e, %Y'`
-directory_date=`date --date "${post_date}" '+%Y/%m/%d'`
+#human_readable_date=`date --date "${post_date}" '+%A, %B %e, %Y'`
+human_readable_date=`/usr/local/bin/gdate --date "${post_date}" '+%A, %B %e, %Y'`
+#directory_date=`date --date "${post_date}" '+%Y/%m/%d'`
+directory_date=`/usr/local/bin/gdate --date "${post_date}" '+%Y/%m/%d'`
 
 sumgrams=`cat ${working_dir}/sumgram_data.tsv | awk -F'\t' '{ print $1 " (" $2 ")" }' | head -n 6 | tail -n 5 | tr '\n' ',' | sed 's/,$//g' | sed 's/,/, /g'`
 
 echo "sumgrams are ${sumgrams}"
 
 post_url="https://oduwsdl.github.io/dsa-puddles/stories/shari/${directory_date}/storygraph_biggest_story_${post_date}/"
-post_message="From the SHARI process: @storygraphbot's biggest news story for yesterday, ${human_readable_date} -- ${sumgrams}"
+post_message="From the SHARI process: @storygraphbot's biggest news story for ${human_readable_date} -- ${sumgrams}"
 
 echo "using post message: ${post_message}"
 
 # these may need to be changed depending on environment
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
 workon shari
 

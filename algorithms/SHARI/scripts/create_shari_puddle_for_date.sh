@@ -103,9 +103,14 @@ if [ $myos == "Linux" ]; then
     sed -i -e "s|^img: .*$|img: /dsa-puddles/assets/img/storygraph_striking_images/${post_date}.png|g" ${jekyll_story_file}
 fi
 
+jekyll_story_file=`realpath ${jekyll_story_file}`
+small_striking_image=`realpath ${small_striking_image}`
+
 cd ${dsa_puddles_directory}
 git pull
+echo story file: ${jekyll_story_file}
 git add ${jekyll_story_file}
+echo image file: ${small_striking_image}
 git add ${small_striking_image}
 git commit -m "adding storygraph story for ${post_date}"
 git push
