@@ -71,7 +71,8 @@ if [ ! -e ${original_resource_file} ]; then
 
     echo "creating StoryGraph file ${sg_file}"
 
-    docker-compose run sgtk sgtk -o graphs_links.txt maxgraph \
+#    docker-compose run sgtk sgtk -o graphs_links.txt maxgraph \
+    /home/smj/.virtualenvs/shari/bin/sgtk -o graphs_links.txt maxgraph \
         --daily-maxgraph-count=0 -y ${sg_year} --start-mm-dd=${sg_month}-${sg_date} --end-mm-dd=${sg_month}-${sg_date} \
         --cluster-stories --format=maxstory_links --maxstory-count=1 > ${working_directory}/sg-output.txt 2>&1
 #    sg_base_uri=`cat ${working_directory}/sg-output.txt | grep "service uri:" | awk '{ print $3 }'`

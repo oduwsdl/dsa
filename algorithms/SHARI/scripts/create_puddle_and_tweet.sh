@@ -4,14 +4,15 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 export PATH=/usr/local/bin:$PATH
 
-PUDDLES_DIR="/Users/smj/SHARI/dsa-puddles"
-PUDDLES_WORKING_DIR="/Users/smj/SHARI/dsa-puddles-working/storygraph-biggest-stories"
-TWITTER_CREDENTIALS_FILE="/Users/smj/SHARI/credentials/twitter-credentials.yaml"
+PUDDLES_DIR="/home/smj/SHARI/dsa-puddles"
+PUDDLES_WORKING_DIR="/home/smj/SHARI/dsa-puddles-working/storygraph-biggest-stories"
+TWITTER_CREDENTIALS_FILE="/home/smj/SHARI/credentials/twitter-credentials.yaml"
 
 if [ -n "$1" ]; then
     YESTERDAY=$1
 else
-    YESTERDAY=`/usr/local/bin/gdate -d 'yesterday' '+%Y-%m-%d'`
+#    YESTERDAY=`/usr/local/bin/gdate -d 'yesterday' '+%Y-%m-%d'`
+    YESTERDAY=`date -d 'yesterday' '+%Y-%m-%d'`
 fi
 
 echo "creating SHARI puddle for $YESTERDAY"
